@@ -1,0 +1,26 @@
+.bottom {
+    top:auto;
+    left:0;
+    right:0;
+    bottom:15px;
+    height: auto;
+    max-height:200px;
+    background-color: white;
+    position:absolute;
+    z-index: 1111;
+    border: 1px solid #a5a5a1;
+}
+
+.title {
+    margin: 5px;
+    font-weight: 600;
+}
+
+label , select {
+    margin:0 5px;
+}
+
+select {
+    font-size: 18px;
+}
+
