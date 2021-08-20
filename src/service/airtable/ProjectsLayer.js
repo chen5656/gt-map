@@ -21,13 +21,16 @@ const layerProperties=()=>{
             [41, 184, 231, 0.7], "On Progress"
         ],
         gray: [
-            [206, 204, 203, 0.3], "Done"
+            [33, 33, 33, 0.3], "Done"
+        ],
+        white: [
+            [255, 255, 255, 0.3], "Done"
         ],
     }
 
     let uniqueSymbols = ["Chi Shen", "Siwei Chen", "All"].map(
         person => {
-            return ["green", "red", "blue", "gray"].map(color => {
+            return ["green", "red", "blue", "gray","white"].map(color => {
                 return {
                     value: `${person}.${color}`,
                     symbol: {

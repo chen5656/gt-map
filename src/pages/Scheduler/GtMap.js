@@ -203,6 +203,10 @@ function GtMap(props) {
     }
   },[fullExtent]);
 
+  useEffect(()=>{
+    setProjectData(null);
+  },[props.mapName])
+
   const handleClearSearch=()=>{
     searchWidget.clear();
   }

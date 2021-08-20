@@ -7,14 +7,17 @@ import {
 } from './airtableFunctions';
 
 const getAllProjects = (mapName) => {
-    // if(mapName==='main'){
+    if(mapName==='main'){
+        console.log('main')
         return getAirTableData( "service_schedule", "for_map");
 
-    // }
-    // if(mapName==='need-invoice'){
-    //     return getAirTableData( "service_schedule", "for_map_need_invoice");
+    }
+    if(mapName==='need-invoice'){
+        console.log('2')
 
-    // }
+        return getAirTableData( "service_schedule", "for_map_need_invoice");
+
+    }
     
 }
 

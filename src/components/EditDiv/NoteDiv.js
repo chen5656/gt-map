@@ -6,9 +6,9 @@ const OneNotes=({item})=>{
   {item.fields.notes&&item.fields.notes}<br /> 
   {item.fields.attachments&&item.fields.attachments.map((attachment,i)=>{
       return (
-      <a href={attachment.url} target="_blank" key={i}>
+      <a href={attachment.url} target="_blank" rel="noreferrer" i key={i}>
       { (attachment.thumbnails&&attachment.thumbnails.large)?
-       <img src={attachment.thumbnails.large.url} width="210"/>
+       <img src={attachment.thumbnails.large.url} width="210" alt='note photo'/>
        :"file"
         }  
       </a>)

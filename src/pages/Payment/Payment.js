@@ -1,9 +1,6 @@
 import React, {
-    useRef,
-    useEffect,
     useState,
 } from 'react';
-import Button from '@material-ui/core/Button';
 
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -23,8 +20,12 @@ const useStyles = makeStyles((theme) => ({
     width: "100vw",
   },
   count:{fontSize: 22,    fontWeight: 600,    margin: 5},
-  clickable:{cursor: 'pointer'  }
-}));
+  clickable:{cursor: 'pointer'  },
+  listItem:{
+    background: 'rgb(2,0,36)',
+    background: 'linear-gradient(180deg, rgba(2,0,36,1) 0%, rgba(152,152,152,0.6) 2%, rgba(255,255,255,1) 10%)'
+  }
+  }));
 
 
 const Payment = () => {
@@ -37,8 +38,7 @@ const Payment = () => {
             needPaymentData.length>0&&<List  > 
             {needPaymentData.map(row=>{
                  return (
-                     <>
-                     <ListItem key={row.id}>
+                    <ListItem key={row.id} className={classes.listItem}>
                      <ListItemAvatar>
                        <Avatar className={classes.clickable} onClick={()=>{window.open(`https://airtable.com/tblwP6kTta7BazPnb/viwzls1caxMVmeZuk/${row.id}?blocks=hide`);}}>
                          <EditIcon />
@@ -46,8 +46,6 @@ const Payment = () => {
                      </ListItemAvatar>
                      <ListItemText primary={row.fields.address} secondary={`${row.fields.customerId}, ${ row.fields.whoDid} , $${row.fields.estimate}`} />
                    </ListItem>
-                     <Divider light />
-                   </>
                  )
              })} 
        </List>
