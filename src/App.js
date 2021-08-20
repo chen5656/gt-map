@@ -1,4 +1,4 @@
-import React ,{useRef,} from 'react';
+import React  from 'react';
 import Scheduler from './pages/Scheduler/GtMap';
 import Payment from './pages/Payment/Payment';
 import Button from '@material-ui/core/Button';
@@ -46,6 +46,7 @@ const App=(props)=>{
               <div>
                     <Grid container className={classes.root} spacing={2}>
                       <Grid item ><Link to="/">Home</Link> </Grid>
+                      <Grid item ><Link to="/needInvoice">出单</Link> </Grid>
                       <Grid item ><Link to="/payment">付款</Link> </Grid>
                       <Grid item ><Link to="/report">Report</Link> </Grid>
                     </Grid>
@@ -56,8 +57,11 @@ const App=(props)=>{
                       <Route path="/payment">
                         <Payment/>
                       </Route>
+                      <Route path="/needInvoice">
+                        <Scheduler mapName='need-invoice'/>
+                      </Route>
                       <Route path="/">
-                        <Scheduler user={user}/> 
+                        <Scheduler mapName='main' /> 
                       </Route>
                     </Switch>
                   </div>   

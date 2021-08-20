@@ -22,16 +22,14 @@ const useStyles = makeStyles((theme) => ({
   table: {
     width: "100vw",
   },
-  count:{fontSize: 22,    fontWeight: 600,    margin: 5}
+  count:{fontSize: 22,    fontWeight: 600,    margin: 5},
+  clickable:{cursor: 'pointer'  }
 }));
 
 
-const Payment = (props) => {
+const Payment = () => {
     const classes = useStyles();
     const [needPaymentData, setNeedPaymentData] = useState([]);
-    
-
-
     return (<>
         <GetPaymentData setNeedPaymentData={setNeedPaymentData}/>
         <div className={classes.count}>{needPaymentData.length} waiting for payments.</div>
@@ -42,7 +40,7 @@ const Payment = (props) => {
                      <>
                      <ListItem key={row.id}>
                      <ListItemAvatar>
-                       <Avatar onClick={()=>{window.open(`https://airtable.com/tblwP6kTta7BazPnb/viwzls1caxMVmeZuk/${row.id}?blocks=hide`);}}>
+                       <Avatar className={classes.clickable} onClick={()=>{window.open(`https://airtable.com/tblwP6kTta7BazPnb/viwzls1caxMVmeZuk/${row.id}?blocks=hide`);}}>
                          <EditIcon />
                        </Avatar>
                      </ListItemAvatar>

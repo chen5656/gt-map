@@ -48,10 +48,7 @@ const layerProperties=()=>{
     return {
         renderer: {
             type: "unique-value",
-            valueExpression: `
-             
-            return $feature.who+ "."+ $feature.color ;
-          `,
+            valueExpression: `return $feature.who+ "."+ $feature.color ;`,
             valueExpressionTitle: "who",
             defaultSymbol: {
                 type: "simple-marker",

@@ -75,7 +75,7 @@ const createSearchWidget =(view)=>{
   return search;
 }
 
-function GtMap() {
+function GtMap(props) {
 
   const mapDiv = useRef(null);
   const [map,setMap]=useState(null);
@@ -214,6 +214,7 @@ function GtMap() {
         noteData={noteData} setNoteData={setNoteData}
         houseData={houseData} setHouseData={setHouseData} 
         customerData={customerData} setCustomerData={setCustomerData} 
+        mapName={props.mapName}
       />
       {searchResult
         &&
