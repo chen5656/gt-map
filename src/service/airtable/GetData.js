@@ -6,30 +6,25 @@ import {
     getAirTableData
 } from './airtableFunctions';
 
-const getAllProjects = (mapName) => {
+export const getAllProjects = (mapName) => {
     if(mapName==='main'){
-        console.log('main')
         return getAirTableData( "service_schedule", "for_map");
 
     }
     if(mapName==='need-invoice'){
-        console.log('2')
-
         return getAirTableData( "service_schedule", "for_map_need_invoice");
-
     }
-    
 }
 
-const getAllNotes = () => {
+export  const getAllNotes = () => {
     return getAirTableData("service_notes", "active_service_notes");
 }
 
-const getAllAppraisal = () => {
+export  const getAllAppraisal = () => {
     return getAirTableData("appraisal", "active_service_appraisal");
 }
 
-const getCutomerId=()=>{
+export const getCutomerId=()=>{
     return getAirTableData("customer", "customerId");
 }
 
@@ -38,7 +33,7 @@ const getAllNeedPayment=()=>{
 }
 
 
-export const GetSchedulerData = (props) => {
+export  const GetSchedulerData = (props) => {
     
     useEffect(() => {
         if(!props.customerData){            

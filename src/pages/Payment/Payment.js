@@ -1,5 +1,5 @@
 import React, {
-    useState,
+    useState,useContext
 } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -7,11 +7,10 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import EditIcon from '@material-ui/icons/Edit';
+import { NeedPaymentContext } from '../../context/GlobalState';
 
-import {GetPaymentData} from "../../service/airtable/GetData";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,14 +28,14 @@ const useStyles = makeStyles((theme) => ({
 
 
 const Payment = () => {
-    const classes = useStyles();
-    const [needPaymentData, setNeedPaymentData] = useState([]);
+  const classes = useStyles();
+  const {paymentData} = useContext(NeedPaymentContext);
+
     return (<>
-        <GetPaymentData setNeedPaymentData={setNeedPaymentData}/>
-        <div className={classes.count}>{needPaymentData.length} waiting for payments.</div>
+        <div className={classes.count}>{paymentData.length} waiting for payments.</div>
         {
-            needPaymentData.length>0&&<List  > 
-            {needPaymentData.map(row=>{
+            paymentData.length>0&&<List  > 
+            {paymentData.map(row=>{
                  return (
                     <ListItem key={row.id} className={classes.listItem}>
                      <ListItemAvatar>
