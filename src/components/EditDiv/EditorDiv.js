@@ -1,7 +1,8 @@
 import React, {
     useState,
     useRef,
-    useEffect
+    useEffect,
+    useContext
 } from 'react';
 
 import Button from '@material-ui/core/Button';
@@ -21,6 +22,8 @@ import { PickerOverlay } from 'filestack-react';
 import {insertNewToAirTable,updateAirTableData} from '../../service/airtable/airtableFunctions';
 import NoteDiv from "./NoteDiv"
 import HouseInfo from "./HouseInfo"
+import { MainMapContext, AppraisalContext} from '../../context/GlobalState';
+
 import "./EditorDiv.css";
 
 
@@ -232,13 +235,22 @@ function TabPanel(props) {
   }
 function EditorDiv(props) { 
     const [value, setValue] = React.useState(0);
+    const {houseData} = useContext(AppraisalContext);
+    const {refreshPrjOnGoing,refreshPrjDone} = useContext(MainMapContext);
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const refreshMap=()=>{
+        props.setSelectedFeature(null);
+        refreshPrjOnGoing();
+        refreshPrjDone();
+
+    }
     let noteData=props.noteData.filter(note=>
         note.fields.service_schedule[0]===props.feature.attributes.airId
     );
-    let houseData=props.houseData.filter(data=>
+    let thisHouseData=houseData.filter(data=>
         data.fields.service_schedule[0]===props.feature.attributes.airId
     );
 
@@ -256,15 +268,12 @@ function EditorDiv(props) {
           <Tab label={<AssignmentIcon/>} />
      
           <Tab label={ <Badge badgeContent={noteData.length} color="primary">  <AttachmentIcon /></Badge>} />
-          <Tab label={ <Badge variant="dot" invisible={!houseData.length} color="primary"><HomeIcon/></Badge>} disabled={houseData.length?false:true} />
+          <Tab label={ <Badge variant="dot" invisible={!thisHouseData.length} color="primary"><HomeIcon/></Badge>} disabled={thisHouseData.length?false:true} />
         </Tabs>
         <TabPanel value={value} index={0}>
             <>
                 <div className="editbox">
-                    <EditorForm  feature={props.feature}  refreshMap={()=>{
-                        props.setSelectedFeature(null);
-                        props.setProjectData(null);
-                    }}/></div>
+                    <EditorForm  feature={props.feature}  refreshMap={refreshMap}/></div>
                 <div className="editbox">
                     <NewNoteForm serviceId={props.feature.attributes.airId} setNoteData={props.setNoteData}/>
                 </div>
@@ -274,7 +283,7 @@ function EditorDiv(props) {
             <NoteDiv noteData={noteData} />
         </TabPanel>
         <TabPanel value={value} index={2} style={{padding:"5px",backgroundColor:"#ececec"}}>
-           { houseData.length  && <HouseInfo data={houseData} />}
+           { thisHouseData.length  && <HouseInfo data={thisHouseData} />}
         </TabPanel>
     </div>;
 }

@@ -1,8 +1,9 @@
 import React, {
-    useEffect,
+    useEffect,useContext,
 } from 'react';
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import Extent from '@arcgis/core/geometry/Extent';
+import { MainMapContext} from '../../context/GlobalState';
 
 const layerProperties=()=>{
     let esriMarkerStyle = {
@@ -92,16 +93,18 @@ const layerProperties=()=>{
 const layerFormat= layerProperties();
 
 const ProjectsLayer=(props)=>{
+    const {prjData} = useContext(MainMapContext);
+    var mapData=prjData[props.mapName];
     useEffect(() => {
-        if(props.allProjectsData){
-            let features= createFeatures(props.allProjectsData);
+        if(mapData){
+            let features= createFeatures(mapData);
             let featureLayer= createFeatureLayer(features,layerFormat);
             props.map.layers.removeAll();
             props.map.add(featureLayer);
             let extent=getFullExtent(features);
             props.setFullExtent(extent);
         }
-    } ,[props.allProjectsData]);
+    } ,[mapData]);
 
     function createFeatures(allProjectsData) {
         var result = allProjectsData.map(item => {

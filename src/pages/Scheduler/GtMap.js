@@ -22,7 +22,7 @@ import {GetSchedulerData} from "../../service/airtable/GetData";
 import ProjectsLayer from "../../service/airtable/ProjectsLayer";
 import NewTodoDiv from "../../components/NewTodoDiv/NewTodoDiv";  
 import EditorDiv from "../../components/EditDiv/EditorDiv"
-import { CustomerIdContext } from '../../context/GlobalState';
+import { MainMapContext, AppraisalContext} from '../../context/GlobalState';
 
 
 
@@ -85,17 +85,16 @@ function GtMap(props) {
 
   const [homeWidget,setHomeWidget]=useState(null);
 
-  const [allProjectsData, setProjectData]=useState(null);
   const [noteData, setNoteData]=useState(null);
-  const [houseData, setHouseData]=useState(null);
   const [fullExtent, setFullExtent]=useState(null);
   const [searchResult, setSearchResult]=useState(null);
 
   const [selectedFeature, setSelectedFeature]=useState(null);
   const [searchWidget,setSearchWidget]=useState(null);
-  const {customerData} = useContext(CustomerIdContext);
+  const {houseData} = useContext(AppraisalContext);
+  const {refreshPrjOnGoing,refreshPrjDone} = useContext(MainMapContext);
 
-
+  
   useEffect(() => {
     if (mapDiv.current) {
       
@@ -179,7 +178,8 @@ function GtMap(props) {
       view.when(function(){
         let div=document.getElementById("refreshBtn");
         if(div){div.onclick=()=>{
-          setProjectData(null);
+          refreshPrjOnGoing();
+          refreshPrjDone();
           setNoteData(null);
         }};
       }
@@ -206,43 +206,33 @@ function GtMap(props) {
     }
   },[fullExtent]);
 
-  useEffect(()=>{
-    setProjectData(null);
-  },[props.mapName])
 
   const handleClearSearch=()=>{
     searchWidget.clear();
+    setSearchResult(null)
   }
 
   return (
     <>  
       <GetSchedulerData 
-        data={allProjectsData} setData={setProjectData} 
         noteData={noteData} setNoteData={setNoteData}
-        houseData={houseData} setHouseData={setHouseData} 
-        customerData={customerData} 
         mapName={props.mapName}
       />
-      {searchResult
-        &&
-        <NewTodoDiv feature={searchResult} setProjectData={setProjectData} setSearchResult={setSearchResult}  
-          setNoteData={setNoteData} clearSearch={handleClearSearch} customerData={customerData}
-        />
-      }
+      {searchResult&&<NewTodoDiv feature={searchResult}clearSearch={handleClearSearch}/>}
    
       {selectedFeature && noteData&& <EditorDiv 
-        feature={selectedFeature}  setSelectedFeature={setSelectedFeature}  setProjectData={setProjectData}
+        feature={selectedFeature}  setSelectedFeature={setSelectedFeature}
         noteData={noteData} setNoteData={setNoteData} 
         houseData={houseData} 
       />}
       <div className="mapDiv" ref={mapDiv}>
         <button id="refreshBtn" className="esri-widget" style={{padding:"8px"}} ><div className="esri-icon-refresh"></div></button>
         {
-          view && allProjectsData &&
+          view &&
           <ProjectsLayer 
-            allProjectsData={allProjectsData} 
             setFullExtent={setFullExtent}
             map={map}
+            mapName={props.mapName}
           />
         }           
       </div>

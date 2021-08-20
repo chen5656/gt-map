@@ -1,18 +1,23 @@
 import React ,{
-  useRef,
+  useRef, 
   useState,
+  useContext,
 } from 'react';
   import Button from '@material-ui/core/Button';
 import AppraisalInfo from "../../service/AppraisalData"
 import {insertNewToAirTable} from '../../service/airtable/airtableFunctions';
 import {getStreetViewImage} from '../../service/googleFunctions';
 import   "./NewTodoDiv.css";
+import { MainMapContext, AppraisalContext, CustomerIdContext} from '../../context/GlobalState';
 
 const NewTodoDiv=(props)=>{
   const who = useRef(null);
   const status = useRef(null);
   const customerId = useRef(null);
   const [appraisalData,setAppraisalData] = useState(null);
+  const {refreshPrjOnGoing} = useContext(MainMapContext);
+  const {refreshHouseData} = useContext(AppraisalContext);
+  const {customerData} = useContext(CustomerIdContext);
   function handleSave() {
     let feature=props.feature;
     let data = {
@@ -29,7 +34,7 @@ const NewTodoDiv=(props)=>{
         }]
     };
     insertNewToAirTable( "service_schedule", data).then((record)=>{
-      props.setSearchResult(null);
+      refreshPrjOnGoing();
       props.clearSearch();
     
       //create payment data
@@ -66,8 +71,8 @@ const NewTodoDiv=(props)=>{
                 }
               }]
           } 
-        insertNewToAirTable( "appraisal", data).then((result)=>{   
-          props.setProjectData(null);    
+        insertNewToAirTable( "appraisal", data).then((result)=>{     
+          refreshHouseData();
         })
 
       }else{
@@ -83,17 +88,17 @@ const NewTodoDiv=(props)=>{
           ]
         }
         insertNewToAirTable( "appraisal", data).then((result)=>{   
-          props.setProjectData(null);    
+          refreshHouseData();
         })
-        // props.setProjectData(null);    
       }
 
 
     })
   }
 
+
   return <div className="bottom" >
-    <button onClick={()=>{props.setSearchResult(null)}} className="closeBtn icon-btn">X</button>
+    <button onClick={props.clearSearch} className="closeBtn icon-btn">X</button>
     <div className="title">
       <button className="esri-icon-zoom-in-magnifying-glass icon-btn"></button>{props.feature.attributes.Match_addr}
     </div>
@@ -108,11 +113,10 @@ const NewTodoDiv=(props)=>{
         <select ref={status}>
           <option value="Todo">Todo</option>
           <option value="On progress">On progress</option>
-          <option value="Done">Done</option>
         </select>
         <select ref={customerId}>
           {
-            props.customerData.map(item=>{
+            customerData.map(item=>{
               var value=item.fields["po_number"];
               return   <option value={value} key={value}>{value}</option>
             })

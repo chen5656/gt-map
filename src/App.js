@@ -3,7 +3,7 @@ import Scheduler from './pages/Scheduler/GtMap';
 import Payment from './pages/Payment/Payment';
 import Button from '@material-ui/core/Button';
 import { getUsers } from "./config";
-import { MainMapProvider,NeedInvoiceMapProvider,NotesProvider,
+import { MainMapProvider,NotesProvider,
   AppraisalProvider,CustomerIdProvider,NeedPaymentProvider } from './context/GlobalState';
 
 
@@ -46,7 +46,6 @@ const App=(props)=>{
             <Router>
               <div>
                 <MainMapProvider>
-                <NeedInvoiceMapProvider>
                 <NotesProvider>
                 <AppraisalProvider>
                 <CustomerIdProvider>
@@ -61,7 +60,7 @@ const App=(props)=>{
                         <Payment/>
                       </Route>
                       <Route path="/needInvoice">
-                        <Scheduler mapName='need-invoice'/>
+                        <Scheduler mapName='needInvoice'/>
                       </Route>
                       <Route path="/">
                         <Scheduler mapName='main' /> 
@@ -71,7 +70,6 @@ const App=(props)=>{
                 </CustomerIdProvider>
                 </AppraisalProvider>
                 </NotesProvider>
-                </NeedInvoiceMapProvider>
                 </MainMapProvider>
               </div>   
 

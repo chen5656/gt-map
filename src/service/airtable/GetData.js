@@ -24,21 +24,8 @@ export  const getAllAppraisal = () => {
     return getAirTableData("appraisal", "active_service_appraisal");
 }
 
-
-
 export  const GetSchedulerData = (props) => {
 
-
-    useEffect(() => {
-        if (!props.data) {
-            getAllProjects(props.mapName).then((result) => {
-                props.setData(result.records);
-            });
-            getAllAppraisal().then((result) => {
-                props.setHouseData(result.records);
-            });
-        }
-    }, [props.data]);
     useEffect(() => {
         if (!props.noteData) {
             getAllNotes().then((result) => {

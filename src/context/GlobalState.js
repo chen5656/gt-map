@@ -31,7 +31,6 @@ const getAllNeedPayment=()=>{
 }
 
 export const MainMapContext = createContext(null);
-export const NeedInvoiceMapContext = createContext(null);
 export const NotesContext = createContext(null);
 
 export const AppraisalContext = createContext(null);
@@ -39,46 +38,36 @@ export const CustomerIdContext = createContext(null);
 export const NeedPaymentContext = createContext(null);
 
 export const MainMapProvider=(props)=> {
-    const [data, setData] = useState();
-    function handleRefresh(){
+    const [prjOnProgress, setDataOnProgress] = useState();
+    const [prjNeedInvoice, setDataNeedInvoice] = useState();
+    function handleRefreshOnProgress(){
         getAllProjects('main').then((result) => {
-            setData(result.records);
+            setDataOnProgress(result.records);
       });
     }
-    useEffect(()=> {
-        handleRefresh()
-    },[])
     
-    
-    return (
-      <NeedInvoiceMapContext.Provider value={{
-        data: data,
-        handleRefresh,
-      }}>
-        {props.children}
-      </NeedInvoiceMapContext.Provider>
-    )
-    
-}
-  
-export const NeedInvoiceMapProvider=(props)=> {
-    const [data, setData] = useState();
-    function handleRefresh(){
+    function handleRefreshNeedInvoice(){
         getAllProjects('need-invoice').then((result) => {
-            setData(result.records);
+            setDataNeedInvoice(result.records);
       });
     }
     useEffect(()=> {
-        handleRefresh()
+        handleRefreshOnProgress()
+        handleRefreshNeedInvoice()
     },[])
     
+    
     return (
-      <NeedInvoiceMapContext.Provider value={{
-        data: data,
-        handleRefresh,
+      <MainMapContext.Provider value={{
+        prjData:{
+            needInvoice: prjNeedInvoice,
+            main:prjOnProgress
+        },
+        refreshPrjOnGoing:handleRefreshOnProgress,
+        refreshPrjDone:handleRefreshNeedInvoice,
       }}>
         {props.children}
-      </NeedInvoiceMapContext.Provider>
+      </MainMapContext.Provider>
     )
     
 }
@@ -118,8 +107,8 @@ export const AppraisalProvider=(props)=> {
     },[])
     return (
       <AppraisalContext.Provider value={{
-          data: data,
-          handleRefresh,
+        houseData: data,
+        refreshHouseData:  handleRefresh,
       }}>
         {props.children}
       </AppraisalContext.Provider>
