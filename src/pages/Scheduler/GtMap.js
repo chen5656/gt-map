@@ -1,7 +1,8 @@
 import React, {
   useRef,
   useEffect,
-  useState
+  useState,
+  useContext
 } from "react";
 
 import MapView from "@arcgis/core/views/MapView";
@@ -21,6 +22,7 @@ import {GetSchedulerData} from "../../service/airtable/GetData";
 import ProjectsLayer from "../../service/airtable/ProjectsLayer";
 import NewTodoDiv from "../../components/NewTodoDiv/NewTodoDiv";  
 import EditorDiv from "../../components/EditDiv/EditorDiv"
+import { CustomerIdContext } from '../../context/GlobalState';
 
 
 
@@ -86,12 +88,13 @@ function GtMap(props) {
   const [allProjectsData, setProjectData]=useState(null);
   const [noteData, setNoteData]=useState(null);
   const [houseData, setHouseData]=useState(null);
-  const [customerData, setCustomerData]=useState(null);
   const [fullExtent, setFullExtent]=useState(null);
   const [searchResult, setSearchResult]=useState(null);
 
   const [selectedFeature, setSelectedFeature]=useState(null);
   const [searchWidget,setSearchWidget]=useState(null);
+  const {customerData} = useContext(CustomerIdContext);
+
 
   useEffect(() => {
     if (mapDiv.current) {
@@ -217,7 +220,7 @@ function GtMap(props) {
         data={allProjectsData} setData={setProjectData} 
         noteData={noteData} setNoteData={setNoteData}
         houseData={houseData} setHouseData={setHouseData} 
-        customerData={customerData} setCustomerData={setCustomerData} 
+        customerData={customerData} 
         mapName={props.mapName}
       />
       {searchResult

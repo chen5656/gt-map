@@ -55,12 +55,8 @@ const App=(props)=>{
                       <Grid item ><Link to="/">Home</Link> </Grid>
                       <Grid item ><Link to="/needInvoice">出单</Link> </Grid>
                       <Grid item ><Link to="/payment">付款</Link> </Grid>
-                      <Grid item ><Link to="/report">Report</Link> </Grid>
                     </Grid>
                     <Switch>
-                      <Route path="/report">
-                        <div>Report</div> 
-                      </Route>
                       <Route path="/payment">
                         <Payment/>
                       </Route>

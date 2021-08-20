@@ -24,24 +24,10 @@ export  const getAllAppraisal = () => {
     return getAirTableData("appraisal", "active_service_appraisal");
 }
 
-export const getCutomerId=()=>{
-    return getAirTableData("customer", "customerId");
-}
-
-const getAllNeedPayment=()=>{
-    return getAirTableData("payment", "for_map");
-}
 
 
 export  const GetSchedulerData = (props) => {
-    
-    useEffect(() => {
-        if(!props.customerData){            
-            getCutomerId().then((result) => {
-                props.setCustomerData(result.records);
-            });
-        }
-    },[]);
+
 
     useEffect(() => {
         if (!props.data) {
@@ -60,14 +46,5 @@ export  const GetSchedulerData = (props) => {
             });
         }
     }, [props.noteData]);
-    return null
-}
-
-export  const GetPaymentData = (props)=>{
-    useEffect(() => {           
-        getAllNeedPayment().then((result) => {
-            props.setNeedPaymentData(result.records);
-        });        
-    },[]);
     return null
 }

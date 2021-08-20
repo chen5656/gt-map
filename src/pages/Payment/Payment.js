@@ -1,6 +1,4 @@
-import React, {
-    useState,useContext
-} from 'react';
+import React, {    useContext} from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
@@ -31,7 +29,7 @@ const Payment = () => {
   const classes = useStyles();
   const {paymentData} = useContext(NeedPaymentContext);
 
-    return (<>
+    return (<div>
         <div className={classes.count}>{paymentData.length} waiting for payments.</div>
         {
             paymentData.length>0&&<List  > 
@@ -43,12 +41,13 @@ const Payment = () => {
                          <EditIcon />
                        </Avatar>
                      </ListItemAvatar>
-                     <ListItemText primary={row.fields.address} secondary={`${row.fields.customerId}, ${ row.fields.whoDid} , $${row.fields.estimate}`} />
+                     <ListItemText primary={`${row.fields.address}${ row.fields.invoice?' (invoice sent)':''} `} secondary={`${row.fields.customerId}, ${ row.fields.whoDid} ,
+                      $${row.fields.estimate?row.fields.estimate:0}`} />
                    </ListItem>
                  )
              })} 
        </List>
         }
-    </>)
+    </div>)
 }
 export default Payment;

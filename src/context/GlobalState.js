@@ -139,7 +139,7 @@ export const CustomerIdProvider=(props)=> {
     },[])
       return (
         <CustomerIdContext.Provider value={{
-            data: data,
+            customerData: data,
             handleRefresh,
         }}>
           {props.children}
