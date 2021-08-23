@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 
 import { PickerOverlay } from 'filestack-react';
 import {insertNewToAirTable} from '../../service/airtable/airtableFunctions';
-import { MainMapContext, NotesContext, AppraisalContext} from '../../context/GlobalState';
+import {  NotesContext} from '../../context/GlobalState';
 
 
 const NewNoteForm =({serviceId})=>{
@@ -20,7 +20,8 @@ const NewNoteForm =({serviceId})=>{
 
 
     function showUpload(){
-        setFileStackOn(true);
+        setFileStackOn(!showFileStack);
+        
     }
     function submitAttachment(res){
         if(res.filesUploaded.length>0){
@@ -29,7 +30,6 @@ const NewNoteForm =({serviceId})=>{
                 url:res.filesUploaded[0].url,
             }])
         }       
-        setFileStackOn(false);
     }
 
     function submitNotes(event){
@@ -51,14 +51,15 @@ const NewNoteForm =({serviceId})=>{
         insertNewToAirTable( "service_notes", data).then((result)=>{            
             refreshNotes();
             clearNotesInfo();
-        })
-        
+        })        
         event.preventDefault();
     }
 
     function clearNotesInfo(){
 
+        setFileStackOn(false);
         txtNode.current.value='';
+        setAttachment([]);
     }
 
     // return <form className="editbox" onSubmit={submitNotes}>
@@ -67,14 +68,17 @@ const NewNoteForm =({serviceId})=>{
         <textarea  rows="4" style={{width:"100%"}} ref={txtNode}></textarea>
         <div>
             <button onClick={showUpload}>Upload Attachments</button>
-            {showFileStack&& <PickerOverlay  apikey={"AeHONhRgnTmmlsmAyn09gz"}  onSuccess={submitAttachment}/>}
-                <div>
+            {showFileStack&& 
+            <PickerOverlay 
+            pickerOptions ={{fromSources:['local_file_system', 'url','googledrive'] }}
+             apikey={"AeHONhRgnTmmlsmAyn09gz"} 
+              onSuccess={submitAttachment}/>
+             }
+            <div>
                 {attachments.map(item=>{
-                    return <><span key={item.name}>
-                            <a href={item.url}  target='_blank'>{item.name.slice(0,8)}</a>
-                        </span>
-                        <span>, </span>
-                    </>
+                    return (<span key={item.name}>
+                        <a href={item.url}  target='_blank'>{item.name.slice(0,8)}</a>, 
+                    </span>)
                 })}
             </div>
         </div>
