@@ -17,15 +17,10 @@ import Locator from '@arcgis/core/tasks/Locator';
 
 import "./GtMap.css";
 
-import {GetSchedulerData} from "../../service/airtable/GetData";
-
 import ProjectsLayer from "../../service/airtable/ProjectsLayer";
 import NewTodoDiv from "../../components/NewTodoDiv/NewTodoDiv";  
 import EditorDiv from "../../components/EditDiv/EditorDiv"
-import { MainMapContext, AppraisalContext} from '../../context/GlobalState';
-
-
-
+import { MainMapContext, NotesContext, AppraisalContext, NeedPaymentContext} from '../../context/GlobalState';
 
 const createSearchWidget =(view)=>{
   let search= new Search({
@@ -76,7 +71,6 @@ const createSearchWidget =(view)=>{
   search.set("sources",sources);
   return search;
 }
-
 function GtMap(props) {
 
   const mapDiv = useRef(null);
@@ -85,15 +79,16 @@ function GtMap(props) {
 
   const [homeWidget,setHomeWidget]=useState(null);
 
-  const [noteData, setNoteData]=useState(null);
   const [fullExtent, setFullExtent]=useState(null);
   const [searchResult, setSearchResult]=useState(null);
 
   const [selectedFeature, setSelectedFeature]=useState(null);
   const [searchWidget,setSearchWidget]=useState(null);
-  const {houseData} = useContext(AppraisalContext);
   const {refreshPrjOnGoing,refreshPrjDone} = useContext(MainMapContext);
-
+  const {refreshNotes} = useContext(NotesContext);
+  const {refreshHouseData} = useContext(AppraisalContext);
+  const {refreshNeedPayment} = useContext(NeedPaymentContext);
+  
   
   useEffect(() => {
     if (mapDiv.current) {
@@ -178,9 +173,21 @@ function GtMap(props) {
       view.when(function(){
         let div=document.getElementById("refreshBtn");
         if(div){div.onclick=()=>{
-          refreshPrjOnGoing();
-          refreshPrjDone();
-          setNoteData(null);
+          setTimeout(function(){
+            refreshPrjOnGoing();
+          }, 50); 
+          setTimeout(function(){
+            refreshPrjDone();
+          }, 500); 
+          setTimeout(function(){
+            refreshNotes();
+          }, 1000); 
+          setTimeout(function(){
+            refreshHouseData();
+          }, 1500); 
+          setTimeout(function(){
+            refreshNeedPayment();
+          }, 2000); 
         }};
       }
       );
@@ -214,17 +221,9 @@ function GtMap(props) {
 
   return (
     <>  
-      <GetSchedulerData 
-        noteData={noteData} setNoteData={setNoteData}
-        mapName={props.mapName}
-      />
-      {searchResult&&<NewTodoDiv feature={searchResult}clearSearch={handleClearSearch}/>}
+      {searchResult&&<NewTodoDiv feature={searchResult} clearSearch={handleClearSearch}/>}
    
-      {selectedFeature && noteData&& <EditorDiv 
-        feature={selectedFeature}  setSelectedFeature={setSelectedFeature}
-        noteData={noteData} setNoteData={setNoteData} 
-        houseData={houseData} 
-      />}
+      {selectedFeature &&  <EditorDiv feature={selectedFeature}  setSelectedFeature={setSelectedFeature}/>}
       <div className="mapDiv" ref={mapDiv}>
         <button id="refreshBtn" className="esri-widget" style={{padding:"8px"}} ><div className="esri-icon-refresh"></div></button>
         {

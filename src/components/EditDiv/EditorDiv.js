@@ -22,7 +22,7 @@ import { PickerOverlay } from 'filestack-react';
 import {insertNewToAirTable,updateAirTableData} from '../../service/airtable/airtableFunctions';
 import NoteDiv from "./NoteDiv"
 import HouseInfo from "./HouseInfo"
-import { MainMapContext, AppraisalContext} from '../../context/GlobalState';
+import { MainMapContext, NotesContext, AppraisalContext} from '../../context/GlobalState';
 
 import "./EditorDiv.css";
 
@@ -152,7 +152,7 @@ function EditorForm(props) {
     </div>
 }
 
-const NewNoteForm =({serviceId, setNoteData})=>{
+const NewNoteForm =({serviceId, refreshNotes})=>{
     const txtNode = useRef(null);
     const [attachments,setAttachment]=useState([]);
     const [showFileStack,setFileStackOn]=useState(false);
@@ -187,7 +187,7 @@ const NewNoteForm =({serviceId, setNoteData})=>{
               }]
           }
         insertNewToAirTable( "service_notes", data).then((result)=>{            
-            setNoteData(null);
+            refreshNotes();
         })
         
         event.preventDefault();
@@ -232,22 +232,23 @@ function TabPanel(props) {
         )}
       </div>
     );
-  }
-function EditorDiv(props) { 
+}
+function EditorDiv(props) {
     const [value, setValue] = React.useState(0);
-    const {houseData} = useContext(AppraisalContext);
-    const {refreshPrjOnGoing,refreshPrjDone} = useContext(MainMapContext);
+    const { houseData } = useContext(AppraisalContext);
+    const { refreshPrjOnGoing, refreshPrjDone } = useContext(MainMapContext);
+    const { notesData, refreshNotes } = useContext(NotesContext);
     const handleChange = (event, newValue) => {
-      setValue(newValue);
+        setValue(newValue);
     };
 
-    const refreshMap=()=>{
+    const refreshMap = () => {
         props.setSelectedFeature(null);
         refreshPrjOnGoing();
         refreshPrjDone();
 
     }
-    let noteData=props.noteData.filter(note=>
+    let thisNoteData=notesData.filter(note=>
         note.fields.service_schedule[0]===props.feature.attributes.airId
     );
     let thisHouseData=houseData.filter(data=>
@@ -267,7 +268,7 @@ function EditorDiv(props) {
         >
           <Tab label={<AssignmentIcon/>} />
      
-          <Tab label={ <Badge badgeContent={noteData.length} color="primary">  <AttachmentIcon /></Badge>} />
+          <Tab label={ <Badge badgeContent={thisNoteData.length} color="primary">  <AttachmentIcon /></Badge>} />
           <Tab label={ <Badge variant="dot" invisible={!thisHouseData.length} color="primary"><HomeIcon/></Badge>} disabled={thisHouseData.length?false:true} />
         </Tabs>
         <TabPanel value={value} index={0}>
@@ -275,12 +276,12 @@ function EditorDiv(props) {
                 <div className="editbox">
                     <EditorForm  feature={props.feature}  refreshMap={refreshMap}/></div>
                 <div className="editbox">
-                    <NewNoteForm serviceId={props.feature.attributes.airId} setNoteData={props.setNoteData}/>
+                    <NewNoteForm serviceId={props.feature.attributes.airId} refreshNotes={refreshNotes}/>
                 </div>
             </>
         </TabPanel>
         <TabPanel value={value} index={1} style={{padding:"5px",backgroundColor:"#ececec"}}>
-            <NoteDiv noteData={noteData} />
+            <NoteDiv noteData={thisNoteData} />
         </TabPanel>
         <TabPanel value={value} index={2} style={{padding:"5px",backgroundColor:"#ececec"}}>
            { thisHouseData.length  && <HouseInfo data={thisHouseData} />}
