@@ -18,9 +18,9 @@ import AssignmentIcon from '@material-ui/icons/Assignment';
 import FeatureForm from '@arcgis/core/widgets/FeatureForm';
 import FormTemplate from '@arcgis/core/form/FormTemplate';
 
-import { PickerOverlay } from 'filestack-react';
-import {insertNewToAirTable,updateAirTableData} from '../../service/airtable/airtableFunctions';
+import {updateAirTableData} from '../../service/airtable/airtableFunctions';
 import NoteDiv from "./NoteDiv"
+import NewNoteForm from "./NewNote"
 import HouseInfo from "./HouseInfo"
 import { MainMapContext, NotesContext, AppraisalContext} from '../../context/GlobalState';
 
@@ -152,67 +152,6 @@ function EditorForm(props) {
     </div>
 }
 
-const NewNoteForm =({serviceId, refreshNotes})=>{
-    const txtNode = useRef(null);
-    const [attachments,setAttachment]=useState([]);
-    const [showFileStack,setFileStackOn]=useState(false);
-
-    function showUpload(){
-        setFileStackOn(true);
-    }
-    function submitAttachment(res){
-        if(res.filesUploaded.length>0){
-            setAttachment([...attachments, {
-                name:res.filesUploaded[0].filename,
-                url:res.filesUploaded[0].url,
-            }])
-        }       
-        setFileStackOn(false);
-    }
-
-    function submitNotes(event){
-        var notesDetails=txtNode.current.value;
-        var attachment =  attachments.map(item=>{
-            return {"url":item.url};            
-        });
-        //insertNewToAirTable
-        let data = {
-            "records": [
-              {
-                "fields": {
-                  notes: notesDetails,
-                  attachments: attachment,
-                  service_schedule: [serviceId],
-                }
-              }]
-          }
-        insertNewToAirTable( "service_notes", data).then((result)=>{            
-            refreshNotes();
-        })
-        
-        event.preventDefault();
-    }
-
-    // return <form className="editbox" onSubmit={submitNotes}>
-    return <div  style={{paddingTop:"10px"}}>
-        <h2 className="esri-widget__heading">Add Notes</h2>
-        <textarea  rows="4" style={{width:"100%"}} ref={txtNode}></textarea>
-        <div>
-            <button onClick={showUpload}>Upload Attachments</button>
-            {showFileStack&& <PickerOverlay  apikey={"AeHONhRgnTmmlsmAyn09gz"}  onSuccess={submitAttachment}/>}
-                <div>
-                {attachments.map(item=>{
-                    return <><span key={item.name}>
-                            <a href={item.url}  target='_blank'>{item.name.slice(0,8)}</a>
-                        </span>
-                        <span>, </span>
-                    </>
-                })}
-            </div>
-        </div>
-        <Button variant="contained" color="primary"  onClick={submitNotes} style={{margin:5}}>Submit</Button>
-    </div>
-}
 function TabPanel(props) {    
     const { children, value, index, ...other } = props;  
   
@@ -237,7 +176,7 @@ function EditorDiv(props) {
     const [value, setValue] = React.useState(0);
     const { houseData } = useContext(AppraisalContext);
     const { refreshPrjOnGoing, refreshPrjDone } = useContext(MainMapContext);
-    const { notesData, refreshNotes } = useContext(NotesContext);
+    const { notesData } = useContext(NotesContext);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -246,7 +185,6 @@ function EditorDiv(props) {
         props.setSelectedFeature(null);
         refreshPrjOnGoing();
         refreshPrjDone();
-
     }
     let thisNoteData=notesData.filter(note=>
         note.fields.service_schedule[0]===props.feature.attributes.airId
@@ -276,7 +214,7 @@ function EditorDiv(props) {
                 <div className="editbox">
                     <EditorForm  feature={props.feature}  refreshMap={refreshMap}/></div>
                 <div className="editbox">
-                    <NewNoteForm serviceId={props.feature.attributes.airId} refreshNotes={refreshNotes}/>
+                    <NewNoteForm serviceId={props.feature.attributes.airId} />
                 </div>
             </>
         </TabPanel>
