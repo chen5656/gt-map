@@ -4,62 +4,18 @@ This repo demonstrates how to use [@arcgis/core](https://www.npmjs.com/package/@
 
 ## Get Started
 
-**Step 1** - Run `npm install`. 
+- Tokens in config folder are removed
 
-**Step 2** Configure CSS. Here's a React example:
+- Run `npm install`. 
 
-*index.css*
 
-```css
-@import 'https://js.arcgis.com/4.19/@arcgis/core/assets/esri/themes/light/main.css';
-```
+## Screenshots of this app
 
-For additional information, see the [Build with ES modules](https://developers.arcgis.com/javascript/latest/es-modules/) Guide topic in the SDK.
+![Home page](https://github.com/chen5656/gt-map/blob/main/screenshots/home.JPG?raw=true)
+![Search-widget](https://github.com/chen5656/gt-map/blob/main/screenshots/search-widget.JPG?raw=true)
 
-## Commands
+![Task editor](https://github.com/chen5656/gt-map/blob/main/screenshots/editor.JPG?raw=true)
+![Show-street-view](https://github.com/chen5656/gt-map/blob/main/screenshots/show-street-view.JPG?raw=true)
 
-For a list of all available `npm` commands see the scripts in `package.json`. 
 
-## Misc.
 
-There were recent versions of `create-react-app` that would attempt to inject babel helpers into ArcGIS API for JavaScript code during the build, but would not copy the helper files. We were able to prevent this by letting the build only build for modern browsers.
-
-```json
-// package.json
-{
-  "browserslist": {
-    "production": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
-}
-```
-
-If you run in to issues with this method, you can use [react-app-rewired](https://www.npmjs.com/package/react-app-rewired).
-
-```js
-// config-overrides.js
-module.exports = function override(config, env) {
-  // Tell create-react-app not to run node_modules through babel.
-  // May vary based on version of create-react-app being used.
-  config.module.rules[2].oneOf[2].exclude = /(@babel(?:\/|\\{1,2})runtime|node_modules)/;
-  return config;
-} 
-```
-
----
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
