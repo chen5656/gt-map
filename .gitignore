@@ -27,3 +27,7 @@ yarn-error.log*
 public/assets
 
 build
+src/config/airtable.json
+src/config/auth.json
+src/config/google.json
+src/config/usernames.json
