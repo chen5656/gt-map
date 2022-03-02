@@ -8,8 +8,11 @@ This repo demonstrates how to use [@arcgis/core](https://www.npmjs.com/package/@
 
 - Run `npm install`. 
 
+## Description
+It is a web app solution that works perfectly over desktop and mobile. It uses the power of location to coordinate the field workforce, and provides the public data of the property. It integrates work management for better communication between teams.
 
-## Screenshots of this app
+## 
+Screenshots of this app
 
 ![Home page](https://github.com/chen5656/gt-map/blob/main/screenshots/home.JPG?raw=true)
 ![Search-widget](https://github.com/chen5656/gt-map/blob/main/screenshots/search-widget.JPG?raw=true)
